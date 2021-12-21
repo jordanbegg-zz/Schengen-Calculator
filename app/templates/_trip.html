@@ -1,0 +1,21 @@
+<table class="table table-hover">
+    <tr>
+        <td width="70px">
+            <a href="{{ url_for('main.user', id=trip.traveller.id) }}">
+                <img src="{{ trip.traveller.avatar(70) }}" />
+            </a>
+        </td>
+        <td>
+            {% set user_link %}
+            <span class="user_popup">
+                <a href="{{ url_for('main.user', id=trip.traveller.id) }}">
+                    {{ trip.traveller.id }}
+                </a>
+            </span>
+            {% endset %}
+            <span id="trip{{ trip.id }}"><b>Start</b>: {{ trip.start.strftime("%d %b %Y") }}</span>
+            <br>
+            <span id="trip{{ trip.id }}"><b>End</b>: {{ trip.end.strftime("%d %b %Y") }}</span>
+        </td>
+    </tr>
+</table>
