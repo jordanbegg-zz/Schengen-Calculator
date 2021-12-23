@@ -130,3 +130,9 @@ dmypy.json
 
 # Databases
 *.db
+
+# Details
+deployment_details.txt
+
+#flaskenv
+.flaskenv
