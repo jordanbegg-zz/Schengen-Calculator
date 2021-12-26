@@ -48,6 +48,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "bootlets"
+version = "0.0.2"
+description = "Build HTML in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "click"
 version = "8.0.3"
 description = "Composable command line interface toolkit"
@@ -167,6 +175,17 @@ python-versions = ">=3.6"
 alembic = ">=0.7"
 Flask = ">=0.9"
 Flask-SQLAlchemy = ">=1.0"
+
+[[package]]
+name = "flask-moment"
+version = "1.0.2"
+description = "Formatting of dates and times in Flask templates using moment.js."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Flask = "*"
 
 [[package]]
 name = "flask-sqlalchemy"
@@ -461,7 +480,7 @@ email = ["email-validator"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "8cb88a5da769aa22587442ca05b8f89a565c02ac4eff110a3b9de99584e81fec"
+content-hash = "d69d579cada8d4aee07a8a18ea2eaeb009c4d40749586d4f6579d76e52a63f1b"
 
 [metadata.files]
 alembic = [
@@ -474,6 +493,10 @@ black = [
 ]
 blinker = [
     {file = "blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
+]
+bootlets = [
+    {file = "bootlets-0.0.2-py3-none-any.whl", hash = "sha256:d2e766f5337203d5be1e509cc72e66e6778d04ab9b796c0eb398ae70fd4dfbcc"},
+    {file = "bootlets-0.0.2.tar.gz", hash = "sha256:3d97881f7dacb38e43fee5fb7b5cb22123eeb982724df6088705b6a6c899dd10"},
 ]
 click = [
     {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
@@ -512,6 +535,10 @@ flask-mail = [
 flask-migrate = [
     {file = "Flask-Migrate-3.1.0.tar.gz", hash = "sha256:57d6060839e3a7f150eaab6fe4e726d9e3e7cffe2150fb223d73f92421c6d1d9"},
     {file = "Flask_Migrate-3.1.0-py3-none-any.whl", hash = "sha256:a6498706241aba6be7a251078de9cf166d74307bca41a4ca3e403c9d39e2f897"},
+]
+flask-moment = [
+    {file = "Flask-Moment-1.0.2.tar.gz", hash = "sha256:1faf8fea08080d2396f0c878b92bd0429635977a8f96c553a0d43f15fd8d0213"},
+    {file = "Flask_Moment-1.0.2-py3-none-any.whl", hash = "sha256:cce7c4f39fcf0732bb62a07fbf6cc6305ab5700272fd1c5743c0c0968450a469"},
 ]
 flask-sqlalchemy = [
     {file = "Flask-SQLAlchemy-2.5.1.tar.gz", hash = "sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912"},

@@ -4,13 +4,14 @@
 {% block app_content %}
 <h1>Hi {{ current_user.first_name }}!</h1>
 <br>
-<h2>As of today, the number of days you can stay in the Schengen Area is...</h2>
+<h2>As of {{ moment(date).format("LL") }}, the number of days you can stay in the Schengen Area is...</h2>
 <br>
 <h1 style="text-align:center;">{{ remaining_days }}</h1>
-{% if form %}
+<h2>Update calculation end date</h2>
+{{ wtf.quick_form(end_date_form) }}
+<h2>Add a new trip</h2>
 {{ wtf.quick_form(form) }}
 <br>
-{% endif %}
 {% for trip in trips %}
 {% include '_trip.html' %}
 {% endfor %}
