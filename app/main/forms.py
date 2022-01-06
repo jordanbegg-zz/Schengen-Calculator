@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DateField
+from wtforms import StringField, SubmitField, DateField, HiddenField
 from wtforms.validators import DataRequired
 
 
@@ -18,3 +18,8 @@ class EditProfileForm(FlaskForm):
 class EndDateForm(FlaskForm):
     end = DateField("Calculation End Date", validators=[DataRequired()])
     submit_update_end_date = SubmitField("Submit")
+
+
+class DeleteTripForm(FlaskForm):
+    trip_id = HiddenField()
+    submit_delete_trip = SubmitField("Delete")

@@ -16,6 +16,7 @@
             <span id="trip{{ trip.id }}"><b>Start</b>: {{ trip.start.strftime("%d %b %Y") }}</span>
             <br>
             <span id="trip{{ trip.id }}"><b>End</b>: {{ trip.end.strftime("%d %b %Y") }}</span>
+            <span>{{ wtf.quick_form(delete_trip_form(trip_id=trip.id)) }}</span>
         </td>
     </tr>
 </table>

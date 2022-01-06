@@ -4,7 +4,7 @@ import datetime
 
 from app import db
 from app.main import bp
-from app.main.forms import TripForm, EditProfileForm, EndDateForm
+from app.main.forms import TripForm, EditProfileForm, EndDateForm, DeleteTripForm
 from app.main.panels import EditProfilePanel
 from app.models import Trip, User
 
@@ -27,11 +27,19 @@ def index(date):
     remaining_days = str(current_user.get_remaining_days(date))
     form = TripForm()
     end_date_form = EndDateForm()
-    if form.validate_on_submit():
-        trip = Trip(start=form.start.data, end=form.end.data, traveller=current_user)
-        db.session.add(trip)
-        db.session.commit()
-        flash("Trip added!")
+    if request.method == "POST":
+        if request.form.get("submit_delete_trip"):
+            trip = Trip.query.get(request.form.get("trip_id"))
+            db.session.delete(trip)
+            db.session.commit()
+            flash("Trip deleted!")
+        elif request.form.get("submit_add_trip"):
+            trip = Trip(
+                start=form.start.data, end=form.end.data, traveller=current_user
+            )
+            db.session.add(trip)
+            db.session.commit()
+            flash("Trip added!")
         return redirect(url_for("main.index"))
     if end_date_form.validate_on_submit():
         return redirect(url_for("main.index", date=end_date_form.end.data))
@@ -47,6 +55,7 @@ def index(date):
         remaining_days=remaining_days,
         end_date_form=end_date_form,
         form=form,
+        delete_trip_form=DeleteTripForm,
         trips=trips.items,
         next_url=next_url,
         prev_url=prev_url,
