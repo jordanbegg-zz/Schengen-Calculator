@@ -56,7 +56,7 @@ class User(UserMixin, db.Model):
         trips = self.trips.order_by(Trip.start.desc())
         if trips.count() == 0:
             return 90
-        start = min([trip.start for trip in trips])
+        start = min(trip.start for trip in trips)
         index = pd.date_range(start, end).date
         df = pd.DataFrame(index=index)
         df["inSchengen"] = False
