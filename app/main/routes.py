@@ -63,7 +63,7 @@ def index(date):
     )
 
 
-@bp.route("/user/<id>")
+@bp.route("/user/<id>", methods=["GET", "POST"])
 @login_required
 def user(id):
     user = User.query.get_or_404(id)
@@ -81,12 +81,20 @@ def user(id):
         if trips.has_prev
         else None
     )
+    if request.method == "POST" and request.form.get("submit_delete_trip"):
+        trip = Trip.query.get(request.form.get("trip_id"))
+        db.session.delete(trip)
+        db.session.commit()
+        flash("Trip deleted!")
+        return redirect(url_for("main.user", id=user.id))
+
     return render_template(
         "user.html",
         user=user,
         trips=trips.items,
         next_url=next_url,
         prev_url=prev_url,
+        delete_trip_form=DeleteTripForm,
     )
 
 
@@ -94,24 +102,14 @@ def user(id):
 @login_required
 def edit_profile():
     panel = EditProfilePanel(current_user)
-    # form = EditProfileForm()
-    if request.method == "POST":
-        if (
-            request.form.get("submit_edit_profile")
-            and panel.edit_profile_form.validate()
-        ):
-            current_user.first_name = panel.edit_profile_form.first_name.data
-            current_user.surname = panel.edit_profile_form.surname.data
-            db.session.commit()
-            flash("Your changes have been saved.")
-            return redirect(url_for("main.edit_profile"))
-    # if form.validate_on_submit():
-    #     current_user.first_name = form.first_name.data
-    #     current_user.surname = form.surname.data
-    #     db.session.commit()
-    #     flash("Your changes have been saved.")
-    #     return redirect(url_for("main.edit_profile"))
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        current_user.first_name = form.first_name.data
+        current_user.surname = form.surname.data
+        db.session.commit()
+        flash("Your changes have been saved.")
+        return redirect(url_for("main.edit_profile"))
     elif request.method == "GET":
         panel.edit_profile_form.first_name.data = current_user.first_name
         panel.edit_profile_form.surname.data = current_user.surname
-    return render_template("edit_profile.html", title="Edit Profile", panel=panel)
+    return render_template("edit_profile.html", title="Edit Profile", form=form)
