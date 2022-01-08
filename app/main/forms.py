@@ -12,7 +12,7 @@ class TripForm(FlaskForm):
     def validate_end(self, end):
         if end.data < self.start.data:
             raise ValidationError("End date cannot be before start date.")
-        trip = Trip.query.filter_by(start=self.start.data, end=end)
+        trip = Trip.query.filter_by(start=self.start.data, end=end.data).first()
         if trip:
             raise ValidationError("Trip already exists!")
 
