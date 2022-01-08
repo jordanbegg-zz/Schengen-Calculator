@@ -57,7 +57,7 @@ class User(UserMixin, db.Model):
     ) -> pd.Series:
         trips = self.trips.order_by(Trip.start.desc())
         if trips.count() == 0:
-            return 90
+            return pd.Series(index=[end], data=[90])
         start = min(trip.start for trip in trips)
         index = pd.date_range(start, end).date
         df = pd.DataFrame(index=index)
