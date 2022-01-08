@@ -20,6 +20,7 @@ PyJWT = "^2.3.0"
 pyodbc = "^4.0.32"
 bootlets = "^0.0.2"
 Flask-Moment = "^1.0.2"
+plotly = "^5.5.0"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.12b0", allow-prereleases = true}
