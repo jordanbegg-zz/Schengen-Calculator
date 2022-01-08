@@ -4,28 +4,20 @@
 {% block app_content %}
 <h1>Hi {{ current_user.first_name }}!</h1>
 <br>
-<h2>As of today, the number of days you can stay in the Schengen Area is...</h2>
+<h2>As of {{ moment(date).format("LL") }}, the number of days you can stay in the Schengen Area is...</h2>
 <br>
-<h1 style="text-align:center;">{{ remaining_days }}</h1>
-{% if form %}
-{{ wtf.quick_form(form) }}
+<h1 style="text-align:center;">{{ current_remaining_days }}</h1>
+<h2>Update calculation end date</h2>
+{{ wtf.quick_form(end_date_form) }}
 <br>
-{% endif %}
-{% for trip in trips %}
-{% include '_trip.html' %}
-{% endfor %}
-<nav aria-label="...">
-    <ul class="pager">
-        <li class="previous{% if not prev_url %} disabled{% endif %}">
-            <a href="{{ prev_url or '#' }}">
-                <span aria-hidden="true">&larr;</span>Newer trips
-            </a>
-        </li>
-        <li class="next{% if not next_url %} disabled{% endif %}">
-            <a href="{{ next_url or '#' }}">
-                Older trips <span aria-hidden="true">&rarr;</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+<div id="remaining_days_chart" class="chart"></div>>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script type='text/javascript'>
+    var graphs = {{ fig_json | safe}};
+    Plotly.plot('remaining_days_chart', graphs, {});
+</script>
 {% endblock %}

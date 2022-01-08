@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from hashlib import md5
 import jwt
 import pandas as pd
+from typing import Optional, Union
 
 from app import db, login
 
@@ -22,10 +23,10 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
-    def set_password(self, password):
+    def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)
 
-    def check_password(self, password):
+    def check_password(self, password: str):
         return check_password_hash(self.password_hash, password)
 
     def avatar(self, size):
@@ -34,7 +35,7 @@ class User(UserMixin, db.Model):
             digest, size
         )
 
-    def get_reset_password_token(self, expires_in=600):
+    def get_reset_password_token(self, expires_in: Optional[int] = 600):
         return jwt.encode(
             {"reset_password": self.id, "exp": time() + expires_in},
             current_app.config["SECRET_KEY"],
@@ -42,7 +43,7 @@ class User(UserMixin, db.Model):
         )
 
     @staticmethod
-    def verify_reset_password_token(token):
+    def verify_reset_password_token(token: str):
         try:
             id = jwt.decode(
                 token, current_app.config["SECRET_KEY"], algorithms=["HS256"]
@@ -51,11 +52,13 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
-    def get_remaining_days(self, end: datetime.date = datetime.date.today()):
+    def get_remaining_days(
+        self, end: Optional[datetime.date] = datetime.date.today()
+    ) -> pd.Series:
         trips = self.trips.order_by(Trip.start.desc())
         if trips.count() == 0:
             return 90
-        start = min([trip.start for trip in trips])
+        start = min(trip.start for trip in trips)
         index = pd.date_range(start, end).date
         df = pd.DataFrame(index=index)
         df["inSchengen"] = False
@@ -63,11 +66,11 @@ class User(UserMixin, db.Model):
             df.loc[trip.start : trip.end] = True
         df["count"] = df["inSchengen"].rolling(window=180, min_periods=0).sum()
         df["remainingDays"] = (90 - df["count"]).astype(int)
-        return df.loc[end, "remainingDays"]
+        return df["remainingDays"]
 
 
 @login.user_loader
-def load_user(id):
+def load_user(id: Union[str, float, int]):
     return User.query.get(int(id))
 
 
