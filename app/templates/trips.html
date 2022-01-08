@@ -1,15 +1,11 @@
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<table class="table table-hover">
-    <tr>
-        <td width="256px"><img src="{{ current_user.avatar(256) }}"></td>
-        <td>
-            <h1>User: {{ current_user.first_name }} {{ current_user.surname }}</h1>
-            <p><a href="{{ url_for('main.edit_profile') }}">Edit your profile</a></p>
-        </td>
-    </tr>
-</table>
+<h1>Add a New Trip</h1>
+<br>
+{{ wtf.quick_form(form) }}
+<br>
 {% for trip in trips %}
 {% include '_trip.html' %}
 {% endfor %}
@@ -17,7 +13,7 @@
     <ul class="pager">
         <li class="previous{% if not prev_url %} disabled{% endif %}">
             <a href="{{ prev_url or '#' }}">
-                <span aria-hidden="true">&larr;</span> Newer trips
+                <span aria-hidden="true">&larr;</span>Newer trips
             </a>
         </li>
         <li class="next{% if not next_url %} disabled{% endif %}">

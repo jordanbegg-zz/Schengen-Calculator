@@ -9,24 +9,4 @@
 <h1 style="text-align:center;">{{ remaining_days }}</h1>
 <h2>Update calculation end date</h2>
 {{ wtf.quick_form(end_date_form) }}
-<h2>Add a new trip</h2>
-{{ wtf.quick_form(form) }}
-<br>
-{% for trip in trips %}
-{% include '_trip.html' %}
-{% endfor %}
-<nav aria-label="...">
-    <ul class="pager">
-        <li class="previous{% if not prev_url %} disabled{% endif %}">
-            <a href="{{ prev_url or '#' }}">
-                <span aria-hidden="true">&larr;</span>Newer trips
-            </a>
-        </li>
-        <li class="next{% if not next_url %} disabled{% endif %}">
-            <a href="{{ next_url or '#' }}">
-                Older trips <span aria-hidden="true">&rarr;</span>
-            </a>
-        </li>
-    </ul>
-</nav>
 {% endblock %}
