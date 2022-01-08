@@ -1,6 +1,10 @@
+import json
+import datetime
+
 from flask_login import current_user, login_required
 from flask import flash, request, redirect, url_for, current_app, render_template
-import datetime
+import plotly
+import plotly.graph_objects as go
 
 from app import db
 from app.main import bp
@@ -23,7 +27,8 @@ from app.models import Trip
 @login_required
 def index(date):
     date = datetime.date.fromisoformat(date)
-    remaining_days = str(current_user.get_remaining_days(date))
+    remaining_days = current_user.get_remaining_days(date)
+    current_remaining_days = str(remaining_days[-1])
     end_date_form = EndDateForm()
     if end_date_form.validate_on_submit():
         return redirect(url_for("main.index", date=end_date_form.end.data))
@@ -33,15 +38,30 @@ def index(date):
     )
     next_url = url_for("main.index", page=trips.next_num) if trips.has_next else None
     prev_url = url_for("main.index", page=trips.prev_num) if trips.has_prev else None
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=remaining_days.index,
+            y=remaining_days,
+            fill="tozeroy",
+            line_color="rgb(85,51,255)",
+        )
+    )
+    fig.update_xaxes(title_text="Date"),
+    fig.update_yaxes(title_text="Days Remaining")
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
     return render_template(
         "index.html",
         title="Home",
-        remaining_days=remaining_days,
+        current_remaining_days=current_remaining_days,
         end_date_form=end_date_form,
         trips=trips.items,
         next_url=next_url,
         prev_url=prev_url,
         date=date,
+        fig_json=fig_json,
     )
 
 

@@ -52,7 +52,9 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
-    def get_remaining_days(self, end: Optional[datetime.date] = datetime.date.today()):
+    def get_remaining_days(
+        self, end: Optional[datetime.date] = datetime.date.today()
+    ) -> pd.Series:
         trips = self.trips.order_by(Trip.start.desc())
         if trips.count() == 0:
             return 90
@@ -64,7 +66,7 @@ class User(UserMixin, db.Model):
             df.loc[trip.start : trip.end] = True
         df["count"] = df["inSchengen"].rolling(window=180, min_periods=0).sum()
         df["remainingDays"] = (90 - df["count"]).astype(int)
-        return df.loc[end, "remainingDays"]
+        return df["remainingDays"]
 
 
 @login.user_loader

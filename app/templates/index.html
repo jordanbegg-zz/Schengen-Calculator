@@ -6,7 +6,18 @@
 <br>
 <h2>As of {{ moment(date).format("LL") }}, the number of days you can stay in the Schengen Area is...</h2>
 <br>
-<h1 style="text-align:center;">{{ remaining_days }}</h1>
+<h1 style="text-align:center;">{{ current_remaining_days }}</h1>
 <h2>Update calculation end date</h2>
 {{ wtf.quick_form(end_date_form) }}
+<br>
+<div id="remaining_days_chart" class="chart"></div>>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+<script type='text/javascript'>
+    var graphs = {{ fig_json | safe}};
+    Plotly.plot('remaining_days_chart', graphs, {});
+</script>
 {% endblock %}
