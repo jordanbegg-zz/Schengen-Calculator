@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DateField, HiddenField
 from wtforms.validators import DataRequired, ValidationError
 from app.models import Trip
+from flask_login import current_user
 
 
 class TripForm(FlaskForm):
@@ -12,7 +13,9 @@ class TripForm(FlaskForm):
     def validate_end(self, end):
         if end.data < self.start.data:
             raise ValidationError("End date cannot be before start date.")
-        trip = Trip.query.filter_by(start=self.start.data, end=end.data).first()
+        trip = Trip.query.filter_by(
+            start=self.start.data, end=end.data, traveller=current_user
+        ).first()
         if trip:
             raise ValidationError("Trip already exists!")
 
