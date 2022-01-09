@@ -1,5 +1,10 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
+
 {% block title %}
 {% if title %}{{ title }} - Schengen Calculator{% else %}Welcome to Schengen Calculator{% endif %}
 {% endblock %}
